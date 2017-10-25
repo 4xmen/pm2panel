@@ -28,15 +28,16 @@ app.use(express.urlencoded()); // to support URL-encoded bodies
 //##############################################################################
 app.get('/', function (req, res) {
     if (req.session.islogin) {
-        res.send('hello world');
+        res.sendFile(path.join(__dirname, 'www/index.html'));
     } else {
 //        req.session.views = 1
         res.writeHead(302, {
             'Location': '/login'
                     //add other headers here...
         });
+        res.end();
     }
-    res.end();
+    
 });
 
 app.get('/login', function (req, res) {
