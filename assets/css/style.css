@@ -1,0 +1,19 @@
+body{
+    background: #eee ;
+}
+#login{
+    background: #fff ;
+    width: 400px;
+    margin: 10vh auto;
+    padding: 1em;
+    border-radius: 5px;
+}
+
+#login h1{
+    font-size: 33px;
+    background: blueviolet ;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+}
