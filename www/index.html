@@ -34,7 +34,7 @@
                         <th>Uptime</th>
                         <th>CPU</th>
                         <th>Mem</th>
-                        <th> &nbsp;</th>
+                        <th> Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +48,7 @@
                         <td>{{process.monit.cpu}}</td>
                         <td>{{(process.monit.memory / (1024 * 1024 )).toFixed(2)}} MB</td>
                         <td>
-                            <a :href="'/start?id='+process.pm_id">  
+                            <a :href="'/restart?id='+process.pm_id">  
                                 Restart now
                         </a>
                     </td>

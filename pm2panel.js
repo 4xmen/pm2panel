@@ -13,6 +13,7 @@ const SESSTION_AGE = 10 * 60000; // 10 minutes
 const path = require('path');
 const express = require('express');
 const app = express();
+const exec = require("child_process").exec;
 var session = require('express-session');
 
 // Use the session middleware
@@ -33,7 +34,6 @@ app.get('/', function (req, res) {
 //        req.session.views = 1
         res.writeHead(302, {
             'Location': '/login'
-                    //add other headers here...
         });
         res.end();
     }
@@ -49,12 +49,11 @@ app.post('/loginCheck', function (req, res) {
         req.session.islogin = true;
         res.writeHead(302, {
             'Location': '/'
-                    //add other headers here...
         });
     } else {
         res.writeHead(302, {
             'Location': '/login'
-                    //add other headers here...
+
         });
     }
     res.end();
@@ -66,22 +65,45 @@ app.get('/getProccess', function (req, res) {
     if (!req.session.islogin) {
         res.writeHead(302, {
             'Location': '/login'
-                    //add other headers here...
         });
         res.end();
-        
+
     } else {
 
         res.writeHead(200, {
             'Content-Type': 'application/json'
-                    //add other headers here...
+
         });
-        const exec = require("child_process").exec
         exec("pm2 jlist", (error, stdout, stderr) => {
             //do whatever here
             res.write(stdout);
             res.end();
         });
+    }
+});
+
+app.get('/restart', function (req, res) {
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+        
+        if (req.query.id) {
+            exec("pm2 restart " + req.query.id, (error, stdout, stderr) => {
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                console.log(error);
+                console.log(stdout);
+                console.log(stderr);
+                res.end();
+            });
+
+        }
+
     }
 });
 
