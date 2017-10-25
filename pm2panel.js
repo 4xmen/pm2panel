@@ -63,17 +63,28 @@ app.post('/loginCheck', function (req, res) {
 
 
 app.get('/getProccess', function (req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'application/json'
-                //add other headers here...
-    });
-    const exec = require("child_process").exec
-    exec("pm2 jlist", (error, stdout, stderr) => {
-        //do whatever here
-        res.write(stdout);
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+                    //add other headers here...
+        });
         res.end();
-    });
+        
+    } else {
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+                    //add other headers here...
+        });
+        const exec = require("child_process").exec
+        exec("pm2 jlist", (error, stdout, stderr) => {
+            //do whatever here
+            res.write(stdout);
+            res.end();
+        });
+    }
 });
+
 
 app.get('/logout', function (req, res) {
     delete req.session.islogin;
