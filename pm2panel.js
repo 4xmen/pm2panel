@@ -37,7 +37,7 @@ app.get('/', function (req, res) {
         });
         res.end();
     }
-    
+
 });
 
 app.get('/login', function (req, res) {
@@ -58,6 +58,21 @@ app.post('/loginCheck', function (req, res) {
         });
     }
     res.end();
+});
+
+
+
+app.get('/getProccess', function (req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+                //add other headers here...
+    });
+    const exec = require("child_process").exec
+    exec("pm2 jlist", (error, stdout, stderr) => {
+        //do whatever here
+        res.write(stdout);
+        res.end();
+    });
 });
 
 app.get('/logout', function (req, res) {

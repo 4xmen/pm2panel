@@ -28,7 +28,6 @@
                     <tr>
                         <th>App name </th>
                         <th>ID</th>
-                        <th>Mode</th>
                         <th>pid</th>
                         <th>Status</th>
                         <th>Restart</th>
@@ -39,26 +38,53 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Stephen Curry</td>
-                        <td>27</td>
-                        <td>1,91</td>
-                        <td>Akron, OH</td>
-                        <td>Stephen Curry</td>
-                        <td>27</td>
-                        <td>1,91</td>
-                        <td>Akron, OH</td>
-                        <td>1,91</td>
-                        <td>Akron, OH</td>
-                    </tr>
-                  
-                </tbody>
-            </table>
-            <br />
-            <br />
-            <a href="https://github.com/4xmen/pm2panel"> PM2 panel copyright &copy; 2017 &nbsp; | &nbsp;&nbsp; A1Gard@4xmen   </a>
-            <br />
-            <br />
-        </div>
-    </body>
+                    <tr  v-for="process in processes">
+                        <td>{{process.name}}</td>
+                        <td>{{process.pm_id}}</td>
+                        <td>{{process.pid}}</td>
+                        <td>{{process.pm2_env.status}}</td>
+                        <td>{{process.pm2_env.restart_time}}</td>
+                        <td>{{  timing(now - process.pm2_env.pm_uptime)}}</td>
+                        <td>{{process.monit.cpu}}</td>
+                        <td>{{(process.monit.memory / (1024 * 1024 )).toFixed(2)}} MB</td>
+                        <td>
+                            <a :href="'/start?id='+process.pm_id">  
+                                Restart now
+                        </a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <a href="https://github.com/4xmen/pm2panel"> PM2 panel copyright &copy; 2017 &nbsp; | &nbsp;&nbsp; A1Gard@4xmen   </a>
+        <br />
+        <br />
+    </div>
+    <script type="text/javascript">
+var now = 0;
+vue = new Vue({
+el: '#app',
+data: {
+    processes: [],
+    now: 0
+},
+methods: {
+    timing: function (sec) {
+        var date = new Date(null);
+        date.setSeconds(Math.floor(sec / 1000)); // specify value for SECONDS here
+        return  date.toISOString().substr(11, 8);
+    }
+}
+});
+$(function () {
+$.get('/getProccess', function (e) {
+    var newDate = new Date();
+    vue.processes = e;
+    vue.now = Math.floor(newDate.getTime());
+});
+});
+    </script>
+</body>
 </html>
