@@ -21,3 +21,11 @@ body{
 .container{
     background: #fff ;
 }
+
+#loader{
+    text-align: center;
+}
+
+#loader img{
+    height: 128px;
+}

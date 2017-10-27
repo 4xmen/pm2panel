@@ -53,7 +53,11 @@
                         </a>
                     </td>
                 </tr>
-               
+                <tr>
+                    <td colspan="9" id="loader">
+                        <img src="/assets/img/loader.gif" alt="[]" />
+                    </td>
+                </tr>
 
             </tbody>
         </table>
@@ -69,6 +73,7 @@ function GetData() {
         var newDate = new Date();
         vue.processes = e;
         vue.now = Math.floor(newDate.getTime());
+        $("#loader").slideUp(100);
     });
 }
 var now = 0;
@@ -89,7 +94,8 @@ vue = new Vue({
 $(function () {
     GetData();
     $("#refresh").click(function () {
-
+        $("#loader").slideDown(100);
+         GetData();
     });
 });
     </script>
