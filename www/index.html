@@ -15,7 +15,7 @@
             <br />
 
             <div class="float-right">
-                <a href="/" class="button button-primary">  Refresh   </a>
+                <a id="refresh" class="button button-primary">  Refresh   </a>
                 <a href="/logout" class="button">  Logout   </a>
             </div>
             <h2>
@@ -53,6 +53,7 @@
                         </a>
                     </td>
                 </tr>
+               
 
             </tbody>
         </table>
@@ -63,27 +64,33 @@
         <br />
     </div>
     <script type="text/javascript">
+function GetData() {
+    $.get('/getProccess', function (e) {
+        var newDate = new Date();
+        vue.processes = e;
+        vue.now = Math.floor(newDate.getTime());
+    });
+}
 var now = 0;
 vue = new Vue({
-el: '#app',
-data: {
-    processes: [],
-    now: 0
-},
-methods: {
-    timing: function (sec) {
-        var date = new Date(null);
-        date.setSeconds(Math.floor(sec / 1000)); // specify value for SECONDS here
-        return  date.toISOString().substr(11, 8);
+    el: '#app',
+    data: {
+        processes: [],
+        now: 0
+    },
+    methods: {
+        timing: function (sec) {
+            var date = new Date(null);
+            date.setSeconds(Math.floor(sec / 1000)); // specify value for SECONDS here
+            return  date.toISOString().substr(11, 8);
+        }
     }
-}
 });
 $(function () {
-$.get('/getProccess', function (e) {
-    var newDate = new Date();
-    vue.processes = e;
-    vue.now = Math.floor(newDate.getTime());
-});
+    GetData();
+    $("#refresh").click(function () {
+
+    });
 });
     </script>
 </body>
