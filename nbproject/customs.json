@@ -1,0 +1,16 @@
+{
+    "elements": {},
+    "attributes": {
+        "v-if": {},
+        "@submit.prevent": {
+            "context": "form"
+        },
+        "@click": {},
+        "@keyup.enter": {},
+        "scoped": {
+            "context": "style"
+        },
+        "v-for": {},
+        "v-model": {}
+    }
+}
