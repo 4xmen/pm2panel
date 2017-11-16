@@ -114,12 +114,11 @@ app.post('/addProccess', function (req, res) {
             res.end();
             return false;
         }
+        
+        // check is file exists
         if (fs.existsSync(req.body.path)) {
-
+            
             exec('pm2 start "' + req.body.path + '"', (error, stdout, stderr) => {
-                //do whatever here
-//                res.write(stdout);
-//                res.end();
                 req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
                 res.writeHead(302, {
                     'Location': '/'
@@ -220,11 +219,12 @@ app.get('/notification', function (req, res) {
         res.end();
         return false;
     } else {
-        if (!req.session.notication && req.session.notication !== '-') {
+        if (!req.session.notication) {
             res.write('-');
         } else {
+            var message = req.session.notication ;
             delete req.session.notication;
-            res.write(req.session.notication);
+            res.write(message);
         }
         res.end();
     }
