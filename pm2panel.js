@@ -124,6 +124,32 @@ app.get('/restart', function (req, res) {
     }
 });
 
+app.get('/folder', function (req, res) {
+    if (req.query.path === undefined) {
+        var chossedPath = '/';
+    } else {
+        var chossedPath = req.query.path;
+    }
+
+
+
+    if (fs.existsSync(chossedPath)) {
+        
+        fs.readdir(chossedPath, (err, files) => {
+            res.write(JSON.stringify(files));
+            res.end();
+        });
+        
+    } else {
+        
+        res.write('[]');
+        res.end();
+        
+    }
+
+});
+
+
 
 app.get('/logout', function (req, res) {
 
