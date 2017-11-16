@@ -117,8 +117,9 @@ app.post('/addProccess', function (req, res) {
         
         // check is file exists
         if (fs.existsSync(req.body.path)) {
-            
+            // add process
             exec('pm2 start "' + req.body.path + '"', (error, stdout, stderr) => {
+                // save notificarion
                 req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
                 res.writeHead(302, {
                     'Location': '/'
@@ -127,6 +128,8 @@ app.post('/addProccess', function (req, res) {
                 return true;
             });
         } else {
+            
+            // go back
             res.writeHead(302, {
                 'Location': '/'
             });
@@ -173,7 +176,7 @@ app.get('/delete', function (req, res) {
     } else {
         // check id exits 
         if (req.query.id) {
-            // restart the process
+            // delete the process
             exec("pm2 delete " + req.query.id, (error, stdout, stderr) => {
                 res.writeHead(302, {
                     'Location': '/'
@@ -196,8 +199,7 @@ app.get('/dump', function (req, res) {
         res.end();
 
     } else {
-        // check id exits 
-        // restart the process
+        // save process
         exec("pm2 save", (error, stdout, stderr) => {
             res.writeHead(302, {
                 'Location': '/'
@@ -230,8 +232,12 @@ app.get('/notification', function (req, res) {
     }
 });
 
+
+
+/// get folder list
 app.get('/folder', function (req, res) {
 
+    // check is login ?
     if (!req.session.islogin) {
         res.writeHead(302, {
             'Location': '/login'
@@ -239,29 +245,34 @@ app.get('/folder', function (req, res) {
         res.end();
 
     } else {
+        // check path and set default tab
         if (req.query.path === undefined) {
             var chossedPath = '/';
         } else {
             var chossedPath = req.query.path;
         }
-
+        // send json header
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });
 
-
+        // check choosed is exists
         if (fs.existsSync(chossedPath)) {
-
+            // read folder
             fs.readdir(chossedPath, (err, files) => {
+                
+                // creat list
                 var lst = [];
                 chossedPath = chossedPath + '/';
                 chossedPath = chossedPath.replace('//', '/');
+                // set back folder in list
                 var e = path.join(chossedPath, '..');
                 lst.push({'name': '..', 'path': e});
                 files.forEach(file => {
                     var tmp = {'name': file, 'path': chossedPath + file};
                     lst.push(tmp);
                 });
+                // send buffer
                 res.write(JSON.stringify(lst));
                 res.end();
             });
