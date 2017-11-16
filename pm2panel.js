@@ -15,6 +15,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const exec = require("child_process").exec;
+const fs = require('fs');
+
 var session = require('express-session');
 
 // Use the session middleware
@@ -47,7 +49,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/login', function (req, res) {
-    
+
     // render login page
     res.sendFile(path.join(__dirname, 'www/login.html'));
 });
@@ -96,7 +98,7 @@ app.get('/getProccess', function (req, res) {
 });
 
 app.get('/restart', function (req, res) {
-     // send json header
+    // send json header
     if (!req.session.islogin) {
         res.writeHead(302, {
             'Location': '/login'
@@ -124,7 +126,7 @@ app.get('/restart', function (req, res) {
 
 
 app.get('/logout', function (req, res) {
-    
+
     // remover session
     delete req.session.islogin;
     // redirect to login page
