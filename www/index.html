@@ -63,11 +63,55 @@
         </table>
         <br />
         <br />
-        <a href="https://github.com/4xmen/pm2panel"> PM2 panel copyright &copy; 2017 &nbsp; | &nbsp;&nbsp; A1Gard@4xmen   </a>
+        <div class="button button-primary" id="frmCrtl">
+            Show/Hide add prcocess form
+        </div>
         <br />
-        <br />
-    </div>
-    <script type="text/javascript">
+
+
+        <form action="/addProcess" method="POST" class="row" id="addForm">
+            <div class="column">
+                <label> 
+                    Task path:
+                    <input type="text" name="path" v-model="choosedPath" />
+                </label>
+                <input type="submit" value="Add process now" class="button" />
+            </div>
+            <div class="column">
+                list of files:
+                <br />
+
+                (Current path: <b> {{currentDir}} </b>) 
+
+                <ul id="folder-list">
+                    <li v-for="dir in folders"  >
+                        {{dir.name}}
+                        <span v-if="dir.name !== '..'">
+                            <a class="button float-right explore" :href="dir.path+'/'">
+                                 explore
+                            </a>
+
+                            <a class="button float-right select" :href="dir.path">
+                                select
+                            </a>
+                        </span>
+                        <span v-else>
+                            <a class="button float-right"  :href="dir.path+'/'" id="back">
+                               explore
+                            </a>
+                        </span>
+                        <div class="clearfix"></div>
+                    </li>
+                </ul>
+
+            </div>
+
+        </form>
+<a href="https://github.com/4xmen/pm2panel"> PM2 panel copyright &copy; 2017 &nbsp; | &nbsp;&nbsp; A1Gard@4xmen   </a>
+<br />
+<br />
+</div>
+<script type="text/javascript">
 function GetData() {
     $.get('/getProccess', function (e) {
         var newDate = new Date();
@@ -75,13 +119,20 @@ function GetData() {
         vue.now = Math.floor(newDate.getTime());
         $("#loader").slideUp(100);
     });
+    $("#addForm").slideUp(50);
+    $.get('/folder', function (e) {
+        vue.folders = e;
+    });
 }
 var now = 0;
 vue = new Vue({
     el: '#app',
     data: {
         processes: [],
-        now: 0
+        folders: [],
+        now: 0,
+        currentDir: '/',
+        choosedPath: '',
     },
     methods: {
         timing: function (sec) {
@@ -95,9 +146,32 @@ $(function () {
     GetData();
     $("#refresh").click(function () {
         $("#loader").slideDown(100);
-         GetData();
+        GetData();
+    });
+
+    $(document).on('click', ".select", function () {
+        vue.choosedPath = $(this).attr('href');
+        return false;
+    });
+    $(document).on('click', ".explore", function () {
+        vue.currentDir = $(this).attr('href');
+        $.get('/folder', {path: $(this).attr('href')}, function (e) {
+            vue.folders = e;
+        });
+        return false;
+    });
+    $(document).on('click', "#back", function () {
+        vue.currentDir = $(this).attr('href');
+        $.get('/folder', {path: $(this).attr('href')}, function (e) {
+            vue.folders = e;
+        });
+        return false;
+    });
+
+    $("#frmCrtl").click(function () {
+        $("#addForm").slideToggle(300);
     });
 });
-    </script>
+</script>
 </body>
 </html>

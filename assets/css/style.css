@@ -29,3 +29,22 @@ body{
 #loader img{
     height: 128px;
 }
+
+#folder-list .button.float-right{
+    font-size: 8pt;
+    margin-left: 4px;
+    margin-bottom: 0;
+    background: silver ;
+    color: #000;
+}
+#folder-list .button.float-right:hover{
+    background: #eee ;
+}
+
+#folder-list{
+    height: 240px;
+    overflow-y: scroll;
+}
+#folder-list li:nth-child(odd){
+    background: #eee ;
+}

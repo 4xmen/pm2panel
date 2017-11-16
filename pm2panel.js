@@ -125,27 +125,48 @@ app.get('/restart', function (req, res) {
 });
 
 app.get('/folder', function (req, res) {
+
+//    if (!req.session.islogin) {
+//        res.writeHead(302, {
+//            'Location': '/login'
+//        });
+//        res.end();
+//
+//    } else {
     if (req.query.path === undefined) {
         var chossedPath = '/';
     } else {
         var chossedPath = req.query.path;
     }
 
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
 
 
     if (fs.existsSync(chossedPath)) {
-        
+
         fs.readdir(chossedPath, (err, files) => {
-            res.write(JSON.stringify(files));
+            var lst = [];
+            chossedPath =  chossedPath+'/' ;
+            chossedPath = chossedPath.replace('//','/');
+            var e = path.join(chossedPath, '..');
+            lst.push({'name': '..', 'path': e});
+            files.forEach(file => {
+                var tmp = {'name': file, 'path': chossedPath + file};
+                lst.push(tmp);
+            });
+            res.write(JSON.stringify(lst));
             res.end();
         });
-        
+
     } else {
-        
+
         res.write('[]');
         res.end();
-        
+
     }
+//    }
 
 });
 
