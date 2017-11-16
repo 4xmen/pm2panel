@@ -164,6 +164,33 @@ app.get('/restart', function (req, res) {
     }
 });
 
+app.get('/delete', function (req, res) {
+    // send json header
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+        // check id exits 
+        if (req.query.id) {
+            // restart the process
+            exec("pm2 delete " + req.query.id, (error, stdout, stderr) => {
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                console.log(error);
+                console.log(stdout);
+                console.log(stderr);
+                res.end();
+            });
+
+        }
+
+    }
+});
+
 app.get('/folder', function (req, res) {
 
     if (!req.session.islogin) {
