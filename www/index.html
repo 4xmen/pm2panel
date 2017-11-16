@@ -22,7 +22,9 @@
                 Welcome to PM2 panel  
             </h2>
             <br />
-            <br />
+            <div id="notification">
+                
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -96,17 +98,18 @@
             <ul id="folder-list">
                 <li v-for="dir in folders"  >
                     {{dir.name}}
+
                     <span v-if="dir.name !== '..'">
-                        <a class="button float-right explore" :href="dir.path+'/'">
+                        <a class="button button-small button-outline float-right explore" :href="dir.path+'/'">
                            explore
                     </a>
 
-                    <a class="button float-right select" :href="dir.path">
+                    <a class="button float-right select  button-small button-outline" :href="dir.path">
                         select
                     </a>
                 </span>
                 <span v-else>
-                    <a class="button float-right"  :href="dir.path+'/'" id="back">
+                    <a class="button float-right  button-small button-outline"  :href="dir.path+'/'" id="back">
                        explore
                 </a>
             </span>
