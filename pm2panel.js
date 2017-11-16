@@ -96,6 +96,46 @@ app.get('/getProccess', function (req, res) {
         });
     }
 });
+app.post('/addProccess', function (req, res) {
+    // check is user logined
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+   
+        // get json list from the json
+        if (req.body.path === undefined) {
+            res.writeHead(302, {
+                'Location': '/'
+            });
+            res.end();
+            return false;
+        }
+        if (fs.existsSync(req.body.path)) {
+
+            exec('pm2 start "' + req.body.path + '"', (error, stdout, stderr) => {
+                //do whatever here
+//                res.write(stdout);
+//                res.end();
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                res.end();
+                return true;
+            });
+        } else {
+            res.writeHead(302, {
+                'Location': '/'
+            });
+            res.end();
+            return false;
+        }
+
+    }
+});
 
 app.get('/restart', function (req, res) {
     // send json header
