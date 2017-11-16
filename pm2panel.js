@@ -105,7 +105,7 @@ app.post('/addProccess', function (req, res) {
         res.end();
 
     } else {
-   
+
         // get json list from the json
         if (req.body.path === undefined) {
             res.writeHead(302, {
@@ -187,6 +187,31 @@ app.get('/delete', function (req, res) {
             });
 
         }
+
+    }
+});
+
+app.get('/dump', function (req, res) {
+    // send json header
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+        // check id exits 
+        // restart the process
+        exec("pm2 save", (error, stdout, stderr) => {
+            res.writeHead(302, {
+                'Location': '/'
+            });
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            res.end();
+        });
+
 
     }
 });
