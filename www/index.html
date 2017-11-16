@@ -49,64 +49,68 @@
                         <td>{{(process.monit.memory / (1024 * 1024 )).toFixed(2)}} MB</td>
                         <td>
                             <a :href="'/restart?id='+process.pm_id">  
-                                Restart now
+                                [ Restart now ]
                         </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="9" id="loader">
-                        <img src="/assets/img/loader.gif" alt="[]" />
-                    </td>
-                </tr>
+                        &nbsp;
+                        <a :href="'/delete?id='+process.pm_id" class="delete">  
+                            [ Delete ]
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="9" id="loader">
+                    <img src="/assets/img/loader.gif" alt="[]" />
+                </td>
+            </tr>
 
-            </tbody>
-        </table>
-        <br />
-        <br />
-        <div class="button button-primary" id="frmCrtl">
-            Show/Hide add prcocess form
+        </tbody>
+    </table>
+    <br />
+    <br />
+    <div class="button button-primary" id="frmCrtl">
+        Show/Hide add prcocess form
+    </div>
+    <br />
+
+
+    <form action="/addProccess" method="POST" class="row" id="addForm">
+        <div class="column">
+            <label> 
+                Task path:
+                <input type="text" name="path" v-model="choosedPath" />
+            </label>
+            <input type="submit" value="Add process now" class="button" />
         </div>
-        <br />
+        <div class="column">
+            list of files:
+            <br />
 
+            (Current path: <b> {{currentDir}} </b>) 
 
-        <form action="/addProccess" method="POST" class="row" id="addForm">
-            <div class="column">
-                <label> 
-                    Task path:
-                    <input type="text" name="path" v-model="choosedPath" />
-                </label>
-                <input type="submit" value="Add process now" class="button" />
-            </div>
-            <div class="column">
-                list of files:
-                <br />
+            <ul id="folder-list">
+                <li v-for="dir in folders"  >
+                    {{dir.name}}
+                    <span v-if="dir.name !== '..'">
+                        <a class="button float-right explore" :href="dir.path+'/'">
+                           explore
+                    </a>
 
-                (Current path: <b> {{currentDir}} </b>) 
+                    <a class="button float-right select" :href="dir.path">
+                        select
+                    </a>
+                </span>
+                <span v-else>
+                    <a class="button float-right"  :href="dir.path+'/'" id="back">
+                       explore
+                </a>
+            </span>
+            <div class="clearfix"></div>
+        </li>
+    </ul>
 
-                <ul id="folder-list">
-                    <li v-for="dir in folders"  >
-                        {{dir.name}}
-                        <span v-if="dir.name !== '..'">
-                            <a class="button float-right explore" :href="dir.path+'/'">
-                                 explore
-                            </a>
+</div>
 
-                            <a class="button float-right select" :href="dir.path">
-                                select
-                            </a>
-                        </span>
-                        <span v-else>
-                            <a class="button float-right"  :href="dir.path+'/'" id="back">
-                               explore
-                            </a>
-                        </span>
-                        <div class="clearfix"></div>
-                    </li>
-                </ul>
-
-            </div>
-
-        </form>
+</form>
 <a href="https://github.com/4xmen/pm2panel"> PM2 panel copyright &copy; 2017 &nbsp; | &nbsp;&nbsp; A1Gard@4xmen   </a>
 <br />
 <br />
@@ -170,6 +174,12 @@ $(function () {
 
     $("#frmCrtl").click(function () {
         $("#addForm").slideToggle(300);
+    });
+
+    $(document).on('click', '.delete', function () {
+        if (!confirm('Are you sure to delete this process ?')) {
+            return false;
+        }
     });
 });
 </script>

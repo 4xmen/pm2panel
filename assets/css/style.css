@@ -22,6 +22,11 @@ body{
     background: #fff ;
 }
 
+.delete{
+    color: red;
+    font-weight: bold;
+}
+
 #loader{
     text-align: center;
 }
@@ -48,3 +53,4 @@ body{
 #folder-list li:nth-child(odd){
     background: #eee ;
 }
+
