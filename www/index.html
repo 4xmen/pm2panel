@@ -22,9 +22,9 @@
                 Welcome to PM2 panel  
             </h2>
             <br />
-            <div id="notification">
-                
-            </div>
+            <pre id="notification">
+
+            </pre>
             <table>
                 <thead>
                     <tr>
@@ -135,6 +135,11 @@ function GetData() {
     $("#addForm").slideUp(50);
     $.get('/folder', function (e) {
         vue.folders = e;
+    });
+    $.get('/notification', function (e) {
+        if (e !== '-') {
+            $("#notification").text(e).slideDown(300);
+        }
     });
 }
 var now = 0;

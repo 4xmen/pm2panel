@@ -51,3 +51,18 @@ body{
     background: #eee ;
 }
 
+
+#notification{
+    position: relative;
+    min-height: 1em;
+    margin: 1em 0;
+    padding: 1em 1.5em;
+    line-height: 1.4285em;
+    -webkit-transition: opacity .1s ease,color .1s ease,background .1s ease,box-shadow .1s ease;
+    transition: opacity .1s ease,color .1s ease,background .1s ease,box-shadow .1s ease;
+    border-radius: .28571429rem;
+    box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent;
+    background-color: #f8ffff;
+    color: #276f86;
+    display: none;
+}

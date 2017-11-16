@@ -120,6 +120,7 @@ app.post('/addProccess', function (req, res) {
                 //do whatever here
 //                res.write(stdout);
 //                res.end();
+                req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
                 res.writeHead(302, {
                     'Location': '/'
                 });
@@ -153,9 +154,7 @@ app.get('/restart', function (req, res) {
                 res.writeHead(302, {
                     'Location': '/'
                 });
-                console.log(error);
-                console.log(stdout);
-                console.log(stderr);
+                req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
                 res.end();
             });
 
@@ -180,9 +179,7 @@ app.get('/delete', function (req, res) {
                 res.writeHead(302, {
                     'Location': '/'
                 });
-                console.log(error);
-                console.log(stdout);
-                console.log(stderr);
+                req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
                 res.end();
             });
 
@@ -206,13 +203,30 @@ app.get('/dump', function (req, res) {
             res.writeHead(302, {
                 'Location': '/'
             });
-            console.log(error);
-            console.log(stdout);
-            console.log(stderr);
+            req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
             res.end();
         });
 
 
+    }
+});
+
+app.get('/notification', function (req, res) {
+    // send json header
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+        return false;
+    } else {
+        if (!req.session.notication && req.session.notication !== '-') {
+            res.write('-');
+        } else {
+            delete req.session.notication;
+            res.write(req.session.notication);
+        }
+        res.end();
     }
 });
 
