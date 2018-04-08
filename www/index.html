@@ -131,7 +131,10 @@ function GetData() {
         vue.processes = e;
         vue.now = Math.floor(newDate.getTime());
         $("#loader").slideUp(100);
+    }).fail(function() {
+        alert('Error on get Data: Maybe pm2 not installed, or on runned user has not access to get data.'); // or whatever
     });
+    
     $("#addForm").slideUp(50);
     $.get('/folder', function (e) {
         vue.folders = e;
