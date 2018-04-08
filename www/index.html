@@ -133,6 +133,7 @@ function GetData() {
         $("#loader").slideUp(100);
     }).fail(function() {
         alert('Error on get Data: Maybe pm2 not installed, or on runned user has not access to get data.'); // or whatever
+        $("#loader").slideUp(100);
     });
     
     $("#addForm").slideUp(50);
