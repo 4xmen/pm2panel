@@ -327,5 +327,5 @@ app.get('/logout', function (req, res) {
 //##############################################################################
 
 app.listen(PORT, function () {
-    console.log('pm2panel app listening on port ' + PORT + '!');
+    console.log('pm2panel app listening on port ' + PORT + '! \n test: http://localhost:' + PORT );
 });
