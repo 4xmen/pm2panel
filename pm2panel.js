@@ -120,7 +120,12 @@ app.post('/addProccess', function (req, res) {
             // add process
             exec('pm2 start "' + req.body.path + '"', (error, stdout, stderr) => {
                 // save notificarion
-                req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                // req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                if (error != null) {
+                    req.session.notication = error + stderr;
+                } else {
+                    req.session.notication = 'Process:' + req.body.path + ' started successfully';
+                }
                 res.writeHead(302, {
                     'Location': '/'
                 });
@@ -156,7 +161,12 @@ app.get('/restart', function (req, res) {
                 res.writeHead(302, {
                     'Location': '/'
                 });
-                req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                // req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                if (error != null) {
+                    req.session.notication = error + stderr;
+                } else {
+                    req.session.notication = 'Process by id :' + req.query.id + ' restarted successfully';
+                }
                 res.end();
             });
 
@@ -181,7 +191,12 @@ app.get('/delete', function (req, res) {
                 res.writeHead(302, {
                     'Location': '/'
                 });
-                req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                // req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                if (error != null){
+                    req.session.notication = error + stderr;
+                }else{
+                    req.session.notication = 'Process by id :'+ req.query.id + ' deleted successfully';
+                }
                 res.end();
             });
 
@@ -204,7 +219,12 @@ app.get('/dump', function (req, res) {
             res.writeHead(302, {
                 'Location': '/'
             });
-            req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+            //req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+            if (error != null){
+                req.session.notication = error + stderr;
+            }else{
+                req.session.notication = 'current procceses dumped ( saved ) successfully';
+            }
             res.end();
         });
 
