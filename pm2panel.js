@@ -114,7 +114,7 @@ app.post('/addProccess', function (req, res) {
             res.end();
             return false;
         }
-        
+
         // check is file exists
         if (fs.existsSync(req.body.path)) {
             // add process
@@ -133,7 +133,7 @@ app.post('/addProccess', function (req, res) {
                 return true;
             });
         } else {
-            
+
             // go back
             res.writeHead(302, {
                 'Location': '/'
@@ -192,10 +192,10 @@ app.get('/delete', function (req, res) {
                     'Location': '/'
                 });
                 // req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
-                if (error != null){
+                if (error != null) {
                     req.session.notication = error + stderr;
-                }else{
-                    req.session.notication = 'Process by id :'+ req.query.id + ' deleted successfully';
+                } else {
+                    req.session.notication = 'Process by id :' + req.query.id + ' deleted successfully';
                 }
                 res.end();
             });
@@ -220,9 +220,9 @@ app.get('/dump', function (req, res) {
                 'Location': '/'
             });
             //req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
-            if (error != null){
+            if (error != null) {
                 req.session.notication = error + stderr;
-            }else{
+            } else {
                 req.session.notication = 'current procceses dumped ( saved ) successfully';
             }
             res.end();
@@ -244,7 +244,7 @@ app.get('/notification', function (req, res) {
         if (!req.session.notication) {
             res.write('-');
         } else {
-            var message = req.session.notication ;
+            var message = req.session.notication;
             delete req.session.notication;
             res.write(message);
         }
@@ -280,7 +280,7 @@ app.get('/folder', function (req, res) {
         if (fs.existsSync(chossedPath)) {
             // read folder
             fs.readdir(chossedPath, (err, files) => {
-                
+
                 // creat list
                 var lst = [];
                 chossedPath = chossedPath + '/';
@@ -322,10 +322,44 @@ app.get('/logout', function (req, res) {
 
 
 
+
+app.get('/log', function (req, res) {
+    // send json header
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+        // check id exits 
+        if (req.query.id) {
+            // log of the process
+            var proc = require('child_process').spawn("pm2", ['log', req.query.id]);
+
+            req.session.notication = '';
+            proc.stdout.on('data', (data) => {
+                req.session.notication = req.session.notication + data;
+            });
+
+            setTimeout(function () {
+                proc.stdin.end();
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                res.end();
+            }, 500);
+
+        }
+
+    }
+});
+
+
 //##############################################################################
 //                              finazle
 //##############################################################################
 
 app.listen(PORT, function () {
-    console.log('pm2panel app listening on port ' + PORT + '! \n test: http://localhost:' + PORT );
+    console.log('pm2panel app listening on port ' + PORT + '! \n test: http://localhost:' + PORT);
 });

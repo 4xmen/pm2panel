@@ -57,65 +57,75 @@
                         <a :href="'/delete?id='+process.pm_id" class="delete">  
                             [ Delete ]
                     </a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="9" id="loader">
-                    <img src="/assets/img/loader.gif" alt="[]" />
-                </td>
-            </tr>
+                    <a href="'/stop?id='+process.pm_id" v-if="process.pm2_env.status == 'online'">
+                        [ Stop ]
+                    </a>
+                    <a href="'/start?id='+process.pm_id" v-else="">
+                        [ Start agin ]
+                    </a>
 
-        </tbody>
-    </table>
-    <br />
-    <br />
-    <div class="button button-primary" id="frmCrtl">
-        Show/Hide add prcocess form
+                    <a :href="'/log?id='+process.pm_id">  
+                        [ log ]
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="9" id="loader">
+                <img src="/assets/img/loader.gif" alt="[]" />
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+<br />
+<br />
+<div class="button button-primary" id="frmCrtl">
+    Show/Hide add prcocess form
+</div>
+&nbsp;
+&nbsp;
+<a href="/dump" class="button"> 
+    Save current process
+</a>
+<br />
+
+
+<form action="/addProccess" method="POST" class="row" id="addForm">
+    <div class="column">
+        <label> 
+            Task path:
+            <input type="text" name="path" v-model="choosedPath" />
+        </label>
+        <input type="submit" value="Add process now" class="button" />
+
     </div>
-    &nbsp;
-    &nbsp;
-    <a href="/dump" class="button"> 
-        Save current process
-    </a>
-    <br />
+    <div class="column">
+        list of files:
+        <br />
 
+        (Current path: <b> {{currentDir}} </b>) 
 
-    <form action="/addProccess" method="POST" class="row" id="addForm">
-        <div class="column">
-            <label> 
-                Task path:
-                <input type="text" name="path" v-model="choosedPath" />
-            </label>
-            <input type="submit" value="Add process now" class="button" />
+        <ul id="folder-list">
+            <li v-for="dir in folders"  >
+                {{dir.name}}
 
-        </div>
-        <div class="column">
-            list of files:
-            <br />
-
-            (Current path: <b> {{currentDir}} </b>) 
-
-            <ul id="folder-list">
-                <li v-for="dir in folders"  >
-                    {{dir.name}}
-
-                    <span v-if="dir.name !== '..'">
-                        <a class="button button-small button-outline float-right explore" :href="dir.path+'/'">
-                           explore
-                    </a>
-
-                    <a class="button float-right select  button-small button-outline" :href="dir.path">
-                        select
-                    </a>
-                </span>
-                <span v-else>
-                    <a class="button float-right  button-small button-outline"  :href="dir.path+'/'" id="back">
+                <span v-if="dir.name !== '..'">
+                    <a class="button button-small button-outline float-right explore" :href="dir.path+'/'">
                        explore
                 </a>
+
+                <a class="button float-right select  button-small button-outline" :href="dir.path">
+                    select
+                </a>
             </span>
-            <div class="clearfix"></div>
-        </li>
-    </ul>
+            <span v-else>
+                <a class="button float-right  button-small button-outline"  :href="dir.path+'/'" id="back">
+                   explore
+            </a>
+        </span>
+        <div class="clearfix"></div>
+    </li>
+</ul>
 
 </div>
 
