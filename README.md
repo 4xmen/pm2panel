@@ -5,6 +5,7 @@ you can do with this application with web GUI and without any command:
  * Add process to pm2
  * Remove process from pm2
  * Restart process in pm2
+ * show log of process in pm2
  * Save processes
  * has login
 
