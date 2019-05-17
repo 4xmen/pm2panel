@@ -175,6 +175,66 @@ app.get('/restart', function (req, res) {
     }
 });
 
+app.get('/start', function (req, res) {
+    // send json header
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+        // check id exits 
+        if (req.query.id) {
+            // start the process
+            exec("pm2 start " + req.query.id, (error, stdout, stderr) => {
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                // req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                if (error != null) {
+                    req.session.notication = error + stderr;
+                } else {
+                    req.session.notication = 'Process by id :' + req.query.id + ' started successfully';
+                }
+                res.end();
+            });
+
+        }
+
+    }
+});
+
+app.get('/stop', function (req, res) {
+    // send json header
+    if (!req.session.islogin) {
+        res.writeHead(302, {
+            'Location': '/login'
+        });
+        res.end();
+
+    } else {
+        // check id exits 
+        if (req.query.id) {
+            // stop the process
+            exec("pm2 stop " + req.query.id, (error, stdout, stderr) => {
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+                // req.session.notication = error + '\n--------\n' + stdout + '\n--------\n' + stderr;
+                if (error != null) {
+                    req.session.notication = error + stderr;
+                } else {
+                    req.session.notication = 'Process by id :' + req.query.id + ' stopped successfully';
+                }
+                res.end();
+            });
+
+        }
+
+    }
+});
+
 app.get('/delete', function (req, res) {
     // send json header
     if (!req.session.islogin) {
