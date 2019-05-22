@@ -57,10 +57,10 @@
                         <a :href="'/delete?id='+process.pm_id" class="delete">  
                             [ Delete ]
                     </a>
-                    <a href="'/stop?id='+process.pm_id" v-if="process.pm2_env.status == 'online'">
+                    <a :href="'/stop?id='+process.pm_id" v-if="process.pm2_env.status == 'online'">
                         [ Stop ]
                     </a>
-                    <a href="'/start?id='+process.pm_id" v-else="">
+                    <a :href="'/start?id='+process.pm_id" v-else="">
                         [ Start agin ]
                     </a>
 
