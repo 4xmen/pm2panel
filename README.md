@@ -14,6 +14,7 @@ you can do with this application with web GUI and without any command:
 Requirement:
 
  * nodejs
+ * libpam0g-dev (for PAM authentication)
 
 ## how use:
 
@@ -32,6 +33,7 @@ you can change config in first lines of `pm2panel.js`:
 
 ```javascript
 const PORT = 3001;
+const PAM_AUTH = true; // if set to true, USER and PASS won't be used
 const USER = 'admin';
 const PASS = 'admin';
 const SESSTION_AGE = 10 * 60000; // 10 minutes
@@ -42,4 +44,3 @@ change port or user name and password
 <img src="https://www.uplooder.net/img/image/15/fd8d1c8ed2ea1e09e558f423ff2925ae/login-pm2.png" />
 <br /><br />
 <img src="https://www.uplooder.net/img/image/10/f9f161252a89283a2f5aa85b2b1e1718/pm2index.png" />
-

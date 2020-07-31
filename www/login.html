@@ -16,6 +16,7 @@
                 Login to Pm2 panel
             </h1>
             <form method="post" action="/loginCheck">
+                <p class="err" style="display:none;color:red;margin:2em auto 1.5em auto;text-align:center;"></p>
                 <fieldset>
                     <label for="user">Username</label>
                     <input type="text" placeholder="Username" id="user" name="username">
@@ -28,5 +29,18 @@
             </form>
 
         </div>
+
+        <script type="text/javascript">
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('err') != null) {
+                if (urlParams.get('err') == 'invalid_credentials') {
+                    document.querySelector('#login form p.err').innerText = 'Invalid credentials where provided.';
+                } else {
+                    document.querySelector('#login form p.err').innerText = 'A system error occured.';
+                }
+
+                document.querySelector('#login form p.err').style.display = 'block';
+            }
+        </script>
     </body>
 </html>

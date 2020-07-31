@@ -3,6 +3,7 @@
 //                             config panel
 //##############################################################################
 const PORT = 3001;
+const PAM_AUTH = true; // if set to true, USER and PASS won't be used
 const USER = 'admin';
 const PASS = 'admin';
 const SESSTION_AGE = 10 * 60000; // 10 minutes
@@ -16,6 +17,7 @@ const express = require('express');
 const app = express();
 const exec = require("child_process").exec;
 const fs = require('fs');
+const { pamAuthenticate, pamErrors } = require('node-linux-pam');
 
 var session = require('express-session');
 
@@ -55,22 +57,48 @@ app.get('/login', function (req, res) {
 });
 
 app.post('/loginCheck', function (req, res) {
-    // check username and password 
-    if (req.body.username === USER && req.body.passwd == PASS) {
-        // login process
-        req.session.islogin = true;
-        // redirect to panel
-        res.writeHead(302, {
-            'Location': '/'
+    // check if local or pam authentication is requested
+    if (PAM_AUTH) {
+        pamAuthenticate({
+            username: req.body.username,
+            password: req.body.passwd
+        }, (err, code) => {
+            if (!err) {
+                // login process
+                req.session.islogin = true;
+                // redirect to panel
+                res.writeHead(302, {
+                    'Location': '/'
+                });
+            } else {
+                // user or password incorrect go back to login and logging PAM code if not 7 (invalid credentials)
+                if (code != 7) console.log('Unsuccessful PAM authentication, code: ' + code);
+                res.writeHead(302, {
+                    'Location': '/login?err=' + (code == 7 ? 'invalid_credentials' : 'system')
+
+                });
+            }
+
+            res.end();
         });
     } else {
-        // user or password incrrect go back to login
-        res.writeHead(302, {
-            'Location': '/login'
+        // check username and password by local authentication
+        if (req.body.username === USER && req.body.passwd == PASS) {
+            // login process
+            req.session.islogin = true;
+            // redirect to panel
+            res.writeHead(302, {
+                'Location': '/'
+            });
+        } else {
+            // user or password incrrect go back to login
+            res.writeHead(302, {
+                'Location': '/login?err=invalid_credentials'
 
-        });
+            });
+        }
+        res.end();
     }
-    res.end();
 });
 
 
@@ -154,7 +182,7 @@ app.get('/restart', function (req, res) {
         res.end();
 
     } else {
-        // check id exits 
+        // check id exits
         if (req.query.id) {
             // restart the process
             exec("pm2 restart " + req.query.id, (error, stdout, stderr) => {
@@ -184,7 +212,7 @@ app.get('/start', function (req, res) {
         res.end();
 
     } else {
-        // check id exits 
+        // check id exits
         if (req.query.id) {
             // start the process
             exec("pm2 start " + req.query.id, (error, stdout, stderr) => {
@@ -214,7 +242,7 @@ app.get('/stop', function (req, res) {
         res.end();
 
     } else {
-        // check id exits 
+        // check id exits
         if (req.query.id) {
             // stop the process
             exec("pm2 stop " + req.query.id, (error, stdout, stderr) => {
@@ -244,7 +272,7 @@ app.get('/delete', function (req, res) {
         res.end();
 
     } else {
-        // check id exits 
+        // check id exits
         if (req.query.id) {
             // delete the process
             exec("pm2 delete " + req.query.id, (error, stdout, stderr) => {
@@ -392,7 +420,7 @@ app.get('/log', function (req, res) {
         res.end();
 
     } else {
-        // check id exits 
+        // check id exits
         if (req.query.id) {
             // log of the process
             var proc = require('child_process').spawn("pm2", ['log', req.query.id]);
