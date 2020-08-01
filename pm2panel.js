@@ -3,7 +3,7 @@
 //                             config panel
 //##############################################################################
 const PORT = 3001;
-const PAM_AUTH = true; // if set to true, USER and PASS won't be used
+const PAM_AUTH = false; // if set to true, USER and PASS won't be used
 const USER = 'admin';
 const PASS = 'admin';
 const SESSTION_AGE = 10 * 60000; // 10 minutes

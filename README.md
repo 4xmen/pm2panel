@@ -26,6 +26,18 @@ npm install
 node pm2panel
 ```
 
+if you have problem in `npm install` step run this command on linux:
+
+On all the Debian/Ubuntu :
+```bash
+sudo apt-get install libpam0g-dev
+```
+On all the Centos and RHEL:
+```bash
+sudo yum install pam-devel
+```
+
+
 Then you can go to url : http://localhost:3001 or http://server_ip:3001 and the default user is `admin` and password is `admin`.
 
 
