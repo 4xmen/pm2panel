@@ -17,7 +17,6 @@ const express = require('express');
 const app = express();
 const exec = require("child_process").exec;
 const fs = require('fs');
-const { pamAuthenticate, pamErrors } = require('node-linux-pam');
 
 var session = require('express-session');
 
