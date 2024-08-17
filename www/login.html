@@ -1,46 +1,62 @@
 <!DOCTYPE html>
 <html>
-    <head>
-         <title>Login | PM2 panel</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" src="/assets/js/vue.js"></script>
-        <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-        <link type="text/css" rel="stylesheet" href="/assets/css/normalize.css" />
-        <link type="text/css" rel="stylesheet" href="/assets/css/milligram.min.css" />
-        <link type="text/css" rel="stylesheet" href="/assets/css/style.css" />
-    </head>
-    <body>
-        <div id="login">
-            <h1>
-                Login to Pm2 panel
-            </h1>
-            <form method="post" action="/loginCheck">
-                <p class="err" style="display:none;color:red;margin:2em auto 1.5em auto;text-align:center;"></p>
-                <fieldset>
-                    <label for="user">Username</label>
-                    <input type="text" placeholder="Username" id="user" name="username">
+  <head>
+    <title>Login | PM2 panel</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="/assets/js/vue.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/assets/css/normalize.css" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="/assets/css/milligram.min.css"
+    />
+    <link type="text/css" rel="stylesheet" href="/assets/css/style.css" />
+  </head>
+  <body>
+    <div id="login">
+      <h1>Login to Pm2 panel</h1>
+      <form method="post" action="/loginCheck">
+        <p
+          class="err"
+          style="
+            display: none;
+            color: red;
+            margin: 2em auto 1.5em auto;
+            text-align: center;
+          "
+        ></p>
+        <fieldset>
+          <label for="user">Username</label>
+          <input type="text" placeholder="Username" id="user" name="username" />
 
-                    <label for="pass">Password</label>
-                    <input type="password" placeholder="Password" id="pass" name="passwd">
+          <label for="pass">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            id="pass"
+            name="passwd"
+          />
 
-                    <input class="button-primary" type="submit" value="Send">
-                </fieldset>
-            </form>
+          <input class="button-primary" type="submit" value="Send" />
+        </fieldset>
+      </form>
+    </div>
 
-        </div>
+    <script type="text/javascript">
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("err") != null) {
+        if (urlParams.get("err") == "invalid_credentials") {
+          document.querySelector("#login form p.err").innerText =
+            "Invalid credentials where provided.";
+        } else {
+          document.querySelector("#login form p.err").innerText =
+            "A system error occured.";
+        }
 
-        <script type="text/javascript">
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('err') != null) {
-                if (urlParams.get('err') == 'invalid_credentials') {
-                    document.querySelector('#login form p.err').innerText = 'Invalid credentials where provided.';
-                } else {
-                    document.querySelector('#login form p.err').innerText = 'A system error occured.';
-                }
-
-                document.querySelector('#login form p.err').style.display = 'block';
-            }
-        </script>
-    </body>
+        document.querySelector("#login form p.err").style.display = "block";
+      }
+    </script>
+  </body>
 </html>
